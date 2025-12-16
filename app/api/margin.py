@@ -100,7 +100,8 @@ def get_margin_summary(
 
         variance = None
         if target_margin is not None:
-            variance = margin_percent - (target_margin * 100)
+            target_pct = Decimal(str(target_margin)) * 100
+            variance = margin_percent - target_pct
 
         by_product.append(MarginByProduct(
             product_group=group,

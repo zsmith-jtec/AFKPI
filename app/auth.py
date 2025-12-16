@@ -1,40 +1,50 @@
-"""JWT authentication for AFKPI."""
+"""JWT authentication for AFKPI.
+
+NOTE: This is a demo/prototype implementation.
+For production, use a proper user database with hashed passwords.
+"""
 from datetime import datetime, timedelta
 from typing import Optional
+from hashlib import sha256
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.config import settings
 from app.schemas import UserInfo
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 # Bearer token security
 security = HTTPBearer(auto_error=False)
+
+
+def hash_password(password: str) -> str:
+    """Simple password hashing for demo. Use bcrypt in production."""
+    return sha256(password.encode()).hexdigest()
+
+
+# Demo password hash (sha256 of "demo123")
+DEMO_HASH = hash_password("demo123")
 
 # Simple user store (in production, use database)
 # Format: email -> {password_hash, name, role}
 USERS = {
-    "jesse.schroeder@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Jesse Schroeder", "role": "cfo"},
-    "bryan.myers@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Bryan Myers", "role": "controller"},
-    "aaron.forinash@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Aaron Forinash", "role": "coo"},
-    "andrew.webb@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Andrew Webb", "role": "director"},
-    "zach.smith@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Zach Smith", "role": "director"},
-    "dan.gannaway@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Dan Gannaway", "role": "director"},
-    "mike.chasteen@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Mike Chasteen", "role": "manager"},
-    "adam.massens@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Adam Massens", "role": "developer"},
-    "peter.hansen@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Peter Hansen", "role": "estimator"},
-    "jacob.myers@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Jacob Myers", "role": "sales"},
-    "demo@jtec.com": {"password": pwd_context.hash("demo123"), "name": "Demo User", "role": "viewer"},
+    "jesse.schroeder@jtec.com": {"password": DEMO_HASH, "name": "Jesse Schroeder", "role": "cfo"},
+    "bryan.myers@jtec.com": {"password": DEMO_HASH, "name": "Bryan Myers", "role": "controller"},
+    "aaron.forinash@jtec.com": {"password": DEMO_HASH, "name": "Aaron Forinash", "role": "coo"},
+    "andrew.webb@jtec.com": {"password": DEMO_HASH, "name": "Andrew Webb", "role": "director"},
+    "zach.smith@jtec.com": {"password": DEMO_HASH, "name": "Zach Smith", "role": "director"},
+    "dan.gannaway@jtec.com": {"password": DEMO_HASH, "name": "Dan Gannaway", "role": "director"},
+    "mike.chasteen@jtec.com": {"password": DEMO_HASH, "name": "Mike Chasteen", "role": "manager"},
+    "adam.massens@jtec.com": {"password": DEMO_HASH, "name": "Adam Massens", "role": "developer"},
+    "peter.hansen@jtec.com": {"password": DEMO_HASH, "name": "Peter Hansen", "role": "estimator"},
+    "jacob.myers@jtec.com": {"password": DEMO_HASH, "name": "Jacob Myers", "role": "sales"},
+    "demo@jtec.com": {"password": DEMO_HASH, "name": "Demo User", "role": "viewer"},
 }
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    return hash_password(plain_password) == hashed_password
 
 
 def authenticate_user(email: str, password: str) -> Optional[dict]:

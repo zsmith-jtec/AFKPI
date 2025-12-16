@@ -1,5 +1,26 @@
 # AFKPI Frontend - Replit AI Build Instructions
 
+## IMPORTANT: First Steps
+
+Before building the frontend, run these commands in the Replit Shell:
+
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Seed the database with sample data (13 weeks of test data)
+python seed_data.py
+
+# Start the backend server
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+The API will be available at `http://localhost:8000`. Test it works:
+```bash
+curl http://localhost:8000/api/health
+# Should return: {"status":"healthy"}
+```
+
 ## Overview
 
 Build a dashboard frontend for the AFKPI (Weekly Manufacturing KPI) application. The backend API is already built with FastAPI. Your job is to create the UI.

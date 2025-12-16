@@ -25,12 +25,19 @@ A FastAPI backend for tracking weekly manufacturing KPIs: Revenue, Gross Margin,
 # Install dependencies
 pip install -r requirements.txt
 
+# Seed sample data (creates 13 weeks of test data)
+python seed_data.py
+
 # Run the server
 uvicorn app.main:app --reload
 
 # Open API docs
 # http://localhost:8000/docs
 ```
+
+## Test Login
+- Email: `demo@jtec.com`
+- Password: `demo123`
 
 ## API Endpoints
 
