@@ -28,17 +28,17 @@ DEMO_HASH = hash_password("demo123")
 # Simple user store (in production, use database)
 # Format: email -> {password_hash, name, role}
 USERS = {
-    "jesse.schroeder@jtec.com": {"password": DEMO_HASH, "name": "Jesse Schroeder", "role": "cfo"},
-    "bryan.myers@jtec.com": {"password": DEMO_HASH, "name": "Bryan Myers", "role": "controller"},
-    "aaron.forinash@jtec.com": {"password": DEMO_HASH, "name": "Aaron Forinash", "role": "coo"},
-    "andrew.webb@jtec.com": {"password": DEMO_HASH, "name": "Andrew Webb", "role": "director"},
-    "zach.smith@jtec.com": {"password": DEMO_HASH, "name": "Zach Smith", "role": "director"},
-    "dan.gannaway@jtec.com": {"password": DEMO_HASH, "name": "Dan Gannaway", "role": "director"},
-    "mike.chasteen@jtec.com": {"password": DEMO_HASH, "name": "Mike Chasteen", "role": "manager"},
-    "adam.massens@jtec.com": {"password": DEMO_HASH, "name": "Adam Massens", "role": "developer"},
-    "peter.hansen@jtec.com": {"password": DEMO_HASH, "name": "Peter Hansen", "role": "estimator"},
-    "jacob.myers@jtec.com": {"password": DEMO_HASH, "name": "Jacob Myers", "role": "sales"},
-    "demo@jtec.com": {"password": DEMO_HASH, "name": "Demo User", "role": "viewer"},
+    "jschroeder@jtecindustries.com": {"password": DEMO_HASH, "name": "Jesse Schroeder", "role": "cfo"},
+    "bmyers@jtecindustries.com": {"password": DEMO_HASH, "name": "Bryan Myers", "role": "controller"},
+    "aforinash@jtecindustries.com": {"password": DEMO_HASH, "name": "Aaron Forinash", "role": "coo"},
+    "awebb@jtecindustries.com": {"password": DEMO_HASH, "name": "Andrew Webb", "role": "director"},
+    "zsmith@jtecindustries.com": {"password": DEMO_HASH, "name": "Zach Smith", "role": "director"},
+    "dgannaway@jtecindustries.com": {"password": DEMO_HASH, "name": "Dan Gannaway", "role": "director"},
+    "mchasteen@jtecindustries.com": {"password": DEMO_HASH, "name": "Mike Chasteen", "role": "manager"},
+    "amassens@jtecindustries.com": {"password": DEMO_HASH, "name": "Adam Massens", "role": "developer"},
+    "phansen@jtecindustries.com": {"password": DEMO_HASH, "name": "Peter Hansen", "role": "estimator"},
+    "jmyers@jtecindustries.com": {"password": DEMO_HASH, "name": "Jacob Myers", "role": "sales"},
+    "demo@jtecindustries.com": {"password": DEMO_HASH, "name": "Demo User", "role": "viewer"},
 }
 
 
