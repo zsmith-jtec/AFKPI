@@ -1,0 +1,122 @@
+product_line,product_group,category,target_margin
+IPS,CarryLite,AMR Straddle Cart,0.25
+IPS,CarryLite,AMR Pull Cart,0.25
+IPS,CarryLite,Custom Cart,0.25
+IPS,CarryLite,Drum Cart,0.25
+IPS,CarryLite,Full Deck Cart,0.25
+IPS,CarryLite,Kit Cart,0.25
+IPS,CarryLite,Lift Deck Cart,0.25
+IPS,CarryLite,Low Deck Cart,0.25
+IPS,CarryLite,Open Deck Cart,0.25
+IPS,CarryLite,Push Cart,0.25
+IPS,CarryLite,Roller Deck Cart,0.25
+IPS,CarryLite,Shelf Cart,0.25
+IPS,CarryLite,Tilt Down Cart,0.25
+IPS,CarryLite,Turntable Cart,0.25
+IPS,CarryMax,AMR Straddle Cart,0.25
+IPS,CarryMax,AMR Pull Cart,0.25
+IPS,CarryMax,Custom Cart,0.25
+IPS,CarryMax,Drum Cart,0.25
+IPS,CarryMax,Full Deck Cart,0.25
+IPS,CarryMax,Kit Cart,0.25
+IPS,CarryMax,Lift Table,0.25
+IPS,CarryMax,Open Deck Cart,0.25
+IPS,CarryMax,Push Cart,0.25
+IPS,CarryMax,Roller Deck Cart,0.25
+IPS,CarryMax,Shelf Cart,0.25
+IPS,CarryMax,Tilt Down Cart,0.25
+IPS,CarryMax,Turntable Cart,0.25
+IPS,CarryMore,Custom Cart,0.3
+IPS,CarryMore,Drum Cart,0.3
+IPS,CarryMore,Flatbed Rider Cart,0.3
+IPS,CarryMore,Kit Cart,0.3
+IPS,CarryMore,Lift Cart,0.3
+IPS,CarryMore,Mother Cart Non Powered,0.35
+IPS,CarryMore,Mother Cart Powered,0.35
+IPS,CarryMore,Open Deck Cart,0.3
+IPS,CarryMore,Over Under Cart,0.3
+IPS,CarryMore,Refuse Hopper,0.3
+IPS,CarryMore,Roller Deck Cart,0.3
+IPS,CarryMore,Shelf Cart,0.3
+IPS,CarryMore,Tilt Down Cart,0.3
+IPS,CarryMore,Tilt Up Cart,0.3
+IPS,CarryMore,Turntable Cart,0.3
+APS,CarryMatic,Controls,0.365
+APS,CarryMatic,LiftBot,0.35
+APS,CarryMatic,MoveBot,0.35
+APS,CarryMatic,P&D Stand (Stays here also due to smart functionality),0.25
+APS,CarryMatic,Powered Roller Attachment,0.35
+APS,CarryMatic,Powered Transfer Cart,0.35
+APS,CarryMatic,Scissor Lift Attachment,0.35
+APS,CarryMatic,Scissor Lift Power Roller Attachment,0.35
+APS,CarryMatic,ScrubBot,0.35
+APS,CarryMatic,Service Contract,0.25
+APS,CarryMatic,Shuttle Attachment,0.35
+APS,CarryMatic,SpiderBot,0.35
+APS,CarryMatic,Station - Gravity,0.25
+APS,CarryMatic,Station - Powered,0.25
+APS,CarryMatic,SweepBot,0.35
+APS,CarryMatic,System,
+APS,CarryMatic,Tilt Table,0.25
+APS,CarryMatic,TugBot,0.2
+APS,CarryMatic,Mobile Hoist,0.35
+APS,CarryMatic,GuardBot,
+IPS,General,Misc Finished Goods,
+IPS,General,Casters,0.33
+WPS,Warehouse Product Manufactured,Conveyor - Gravity,0.22
+WPS,Warehouse Product Manufactured,Conveyor - Powered,0.22
+WPS,Warehouse Product Manufactured,Cranes,0.22
+WPS,Warehouse Product Manufactured,Docking Targets,0.25
+WPS,Warehouse Product Manufactured,Flow Racks - Steel,0.22
+WPS,Warehouse Product Manufactured,Guard Rails - Steel,0.22
+WPS,Warehouse Product Manufactured,Hoist,0.22
+WPS,Warehouse Product Manufactured,Hose Rack,0.25
+WPS,Warehouse Product Manufactured,Lift & Tilt Table,0.25
+WPS,Warehouse Product Manufactured,Lift Table,0.25
+WPS,Warehouse Product Manufactured,Lift Turntable,0.25
+WPS,Warehouse Product Manufactured,Misc Finished Goods,0.25
+WPS,Warehouse Product Manufactured,MoveMore,0.22
+WPS,Warehouse Product Manufactured,Order Picker Attachment,0.25
+WPS,Warehouse Product Manufactured,P&D Stand,0.25
+WPS,Warehouse Product Manufactured,Pack Tables,0.22
+WPS,Warehouse Product Manufactured,Pallet Slider,0.25
+WPS,Warehouse Product Manufactured,Returnable Rack,
+WPS,Warehouse Product Manufactured,Tilt Table,0.25
+WPS,Warehouse Product Manufactured,Tub Stacker,0.25
+WPS,Warehouse Product Manufactured,Tube & Joint,0.22
+WPS,Warehouse Product Manufactured,Weld Products - Backlines,
+WPS,Warehouse Product Manufactured,Weld Products - Booms,
+WPS,Warehouse Product Manufactured,Weld Products - Cobot,
+WPS,Warehouse Product Manufactured,Workstations,0.22
+WPS,Warehouse Product Distributed,Casters,
+WPS,Warehouse Product Distributed,Containers - Bulk Knockdown,0.2
+WPS,Warehouse Product Distributed,Containers - Corrugated Steel,0.2
+WPS,Warehouse Product Distributed,Containers - Wire,0.2
+WPS,Warehouse Product Distributed,Conveyor - Gravity,0.2
+WPS,Warehouse Product Distributed,Conveyor - Powered,0.2
+WPS,Warehouse Product Distributed,Cranes,0.2
+WPS,Warehouse Product Distributed,Hoists,0.2
+WPS,Warehouse Product Distributed,Industrial Fans,0.2
+WPS,Warehouse Product Distributed,Lift Table,0.2
+WPS,Warehouse Product Distributed,Master Mover Equipment,0.2
+WPS,Warehouse Product Distributed,Misc Finished Goods,
+WPS,Warehouse Product Distributed,Modula Vertical Lift Module,0.2
+WPS,Warehouse Product Distributed,MoveMore,0.2
+WPS,Warehouse Product Distributed,Projectors,0.2
+WPS,Warehouse Product Distributed,Racking,0.2
+WPS,Warehouse Product Distributed,Safety Barriers,0.2
+WPS,Warehouse Product Distributed,Stretch Wrapping Machine,0.2
+WPS,Warehouse Product Distributed,Totes,0.2
+WPS,Equipment,Big Joe Class 1 Equipment,0.2
+WPS,Equipment,Big Joe Class 3 Equipment,0.2
+WPS,Equipment,Service Contract,0.25
+WPS,Server Rack Movers,Controls,0.365
+WPS,Server Rack Movers,Server Rack Autonomous Mover,0.4
+WPS,Server Rack Movers,Server Rack Cart - Dual Bay,0.4
+WPS,Server Rack Movers,Server Rack Cart - Single Bay,0.4
+WPS,Server Rack Movers,Server Rack Shuttle Mover,0.4
+WPS,Server Rack Movers,Server Rack Manual Mover,0.35
+WPS,Server Rack Movers,Server Rack Pallet Mover,0.35
+WPS,Server Rack Movers,Server Rack Powered Mover,0.35
+WPS,Server Rack Movers,Service Contract,0.25
+WPS,Server Racks,Server Racks,0.25
