@@ -83,6 +83,24 @@ def upload_page(request: Request):
     return templates.TemplateResponse("upload.html", {"request": request})
 
 
+@app.get("/revenue", tags=["Pages"])
+def revenue_page(request: Request):
+    """Revenue page."""
+    return templates.TemplateResponse("revenue.html", {"request": request})
+
+
+@app.get("/margin", tags=["Pages"])
+def margin_page(request: Request):
+    """Gross Margin page."""
+    return templates.TemplateResponse("margin.html", {"request": request})
+
+
+@app.get("/labor", tags=["Pages"])
+def labor_page(request: Request):
+    """Labor page."""
+    return templates.TemplateResponse("labor.html", {"request": request})
+
+
 @app.get("/api/health", tags=["Health"])
 def health_check():
     """API health check."""

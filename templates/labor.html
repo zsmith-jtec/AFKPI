@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard{% endblock %}
-{% block page_name %}Dashboard{% endblock %}
+{% block title %}Labor{% endblock %}
+{% block page_name %}Labor{% endblock %}
 
 {% block navbar_right %}
 <div class="d-flex align-items-center gap-3">
@@ -30,7 +30,7 @@
             <div class="sidebar-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/dashboard">
+                        <a class="nav-link" href="/dashboard">
                             <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                         </a>
                     </li>
@@ -45,7 +45,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/labor">
+                        <a class="nav-link active" href="/labor">
                             <i class="fas fa-hard-hat me-2"></i>Labor
                         </a>
                     </li>
@@ -63,7 +63,7 @@
             <!-- Page Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 class="mb-0">Dashboard</h2>
+                    <h2 class="mb-0">Labor</h2>
                     <small class="text-muted" id="week-label">Week --</small>
                 </div>
             </div>
@@ -76,71 +76,60 @@
                 <p class="mt-2 text-muted">Loading data...</p>
             </div>
 
-            <!-- Dashboard Content (hidden until loaded) -->
-            <div id="dashboard-content" class="d-none">
+            <!-- Labor Content (hidden until loaded) -->
+            <div id="page-content" class="d-none">
                 <!-- KPI Cards Row -->
                 <div class="row mb-4">
-                    <!-- Revenue Card -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="kpi-card">
-                            <div class="kpi-label">Revenue (Outbound)</div>
-                            <div class="kpi-value" id="kpi-revenue">--</div>
-                            <div class="kpi-change" id="kpi-revenue-change"></div>
+                            <div class="kpi-label">Direct Labor</div>
+                            <div class="kpi-value" id="kpi-direct-labor">--</div>
+                            <div class="kpi-subtext" id="kpi-labor-hours">-- hours</div>
                         </div>
                     </div>
-
-                    <!-- Margin Card -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="kpi-card">
-                            <div class="kpi-label">Gross Margin</div>
-                            <div class="kpi-value" id="kpi-margin">--</div>
-                            <div class="kpi-subtext" id="kpi-margin-target"></div>
+                            <div class="kpi-label">Burden</div>
+                            <div class="kpi-value" id="kpi-burden">--</div>
+                            <div class="kpi-subtext" id="kpi-burden-hours">-- hours</div>
                         </div>
                     </div>
-
-                    <!-- Labor Card -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="kpi-card">
-                            <div class="kpi-label">Labor Cost</div>
-                            <div class="kpi-value" id="kpi-labor">--</div>
-                            <div class="kpi-subtext" id="kpi-labor-jobs"></div>
+                            <div class="kpi-label">Total Labor Cost</div>
+                            <div class="kpi-value" id="kpi-total-labor">--</div>
+                            <div class="kpi-subtext">Direct + Burden</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="kpi-card">
+                            <div class="kpi-label">Active Jobs</div>
+                            <div class="kpi-value" id="kpi-jobs">--</div>
+                            <div class="kpi-subtext">This Week</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Charts Row -->
+                <!-- Labor by Job Chart -->
                 <div class="row mb-4">
-                    <!-- Revenue by Product Group -->
-                    <div class="col-md-6">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header card-header-dark">
-                                <i class="fas fa-chart-bar me-2"></i>Revenue by Product Group
+                                <i class="fas fa-chart-bar me-2"></i>Top Jobs by Labor Cost
                             </div>
                             <div class="card-body">
-                                <div id="chart-revenue" style="height: 300px;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Margin Trend -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header card-header-dark">
-                                <i class="fas fa-chart-line me-2"></i>Margin Trend (13 Weeks)
-                            </div>
-                            <div class="card-body">
-                                <div id="chart-margin" style="height: 300px;"></div>
+                                <div id="chart-labor" style="height: 350px;"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Top Jobs Table -->
+                <!-- Jobs Table -->
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header card-header-dark">
-                                <i class="fas fa-list me-2"></i>Top Jobs by Cost
+                                <i class="fas fa-table me-2"></i>Job Labor Detail
                             </div>
                             <div class="card-body p-0">
                                 <table class="table table-hover mb-0">
@@ -149,12 +138,13 @@
                                             <th>Job #</th>
                                             <th>Sales Order</th>
                                             <th>Product Group</th>
+                                            <th class="text-end">Labor Hours</th>
                                             <th class="text-end">Direct Labor</th>
                                             <th class="text-end">Burden</th>
                                             <th class="text-end">Total</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="jobs-table-body">
+                                    <tbody id="labor-table-body">
                                         <!-- Populated by JavaScript -->
                                     </tbody>
                                 </table>
@@ -172,12 +162,9 @@
 <script src="/static/js/charts.js"></script>
 <script src="/static/js/app.js"></script>
 <script>
-    // Check authentication
     if (!api.isAuthenticated()) {
         window.location.href = '/login';
     }
-
-    // Initialize dashboard
-    initDashboard();
+    initLabor();
 </script>
 {% endblock %}
