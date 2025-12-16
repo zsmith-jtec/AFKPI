@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block navbar_right %}{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1>AFKPI</h1>
+            <p>Weekly Manufacturing KPI Dashboard</p>
+        </div>
+
+        <form id="login-form">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required
+                       placeholder="your.name@jtec.com">
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required
+                       placeholder="Enter password">
+            </div>
+
+            <div id="login-error" class="alert alert-danger d-none" role="alert">
+                Invalid email or password
+            </div>
+
+            <button type="submit" class="btn btn-jtec-primary w-100">
+                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <small class="text-muted">JTEC Industries Internal Use Only</small>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/app.js"></script>
+<script>
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('login-error');
+
+        errorDiv.classList.add('d-none');
+
+        try {
+            const result = await api.login(email, password);
+            if (result.access_token) {
+                window.location.href = '/dashboard';
+            }
+        } catch (error) {
+            errorDiv.textContent = error.message || 'Invalid email or password';
+            errorDiv.classList.remove('d-none');
+        }
+    });
+
+    // If already logged in, redirect to dashboard
+    if (api.isAuthenticated()) {
+        window.location.href = '/dashboard';
+    }
+</script>
+{% endblock %}

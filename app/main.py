@@ -2,13 +2,21 @@
 
 FastAPI application entry point.
 """
-from fastapi import FastAPI
+from pathlib import Path
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse
 from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.database import init_db
 from app.api import auth, revenue, margin, labor, drill, audit, weeks
+
+# Template and static file paths
+BASE_DIR = Path(__file__).resolve().parent.parent
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 @asynccontextmanager
@@ -45,15 +53,27 @@ app.include_router(labor.router, prefix="/api/labor", tags=["Labor"])
 app.include_router(drill.router, prefix="/api/drill", tags=["Drill-Down"])
 app.include_router(audit.router, prefix="/api/audit", tags=["Audit"])
 
+# Mount static files
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
-@app.get("/", tags=["Health"])
-def root():
-    """Health check endpoint."""
-    return {
-        "app": settings.app_name,
-        "version": settings.app_version,
-        "status": "running"
-    }
+
+# HTML Routes
+@app.get("/", tags=["Pages"])
+def home(request: Request):
+    """Redirect to login or dashboard."""
+    return RedirectResponse(url="/login")
+
+
+@app.get("/login", tags=["Pages"])
+def login_page(request: Request):
+    """Login page."""
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+@app.get("/dashboard", tags=["Pages"])
+def dashboard_page(request: Request):
+    """Dashboard page."""
+    return templates.TemplateResponse("dashboard.html", {"request": request})
 
 
 @app.get("/api/health", tags=["Health"])

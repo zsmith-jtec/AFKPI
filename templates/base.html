@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AFKPI{% endblock %} - Weekly KPI Dashboard</title>
+
+    <!-- Bootstrap 5.3.0 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome 6.4.0 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Plotly.js for charts -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Custom JTEC Design System styles -->
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark navbar-jtec">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                JTEC INDUSTRIES <span class="brand-separator">|</span> AFKPI
+            </span>
+            <div class="d-flex align-items-center">
+                {% block navbar_right %}
+                <span class="navbar-location">East Peoria, IL</span>
+                {% endblock %}
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer-jtec">
+        2025 Jtec Industries <span class="brand-separator">|</span> East Peoria, IL
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/static/js/api.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
