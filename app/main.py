@@ -12,7 +12,7 @@ from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.database import init_db
-from app.api import auth, revenue, margin, labor, drill, audit, weeks
+from app.api import auth, revenue, margin, labor, drill, audit, weeks, upload
 
 # Template and static file paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,6 +52,7 @@ app.include_router(margin.router, prefix="/api/margin", tags=["Margin"])
 app.include_router(labor.router, prefix="/api/labor", tags=["Labor"])
 app.include_router(drill.router, prefix="/api/drill", tags=["Drill-Down"])
 app.include_router(audit.router, prefix="/api/audit", tags=["Audit"])
+app.include_router(upload.router, prefix="/api/upload", tags=["Upload"])
 
 # Mount static files
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
@@ -74,6 +75,12 @@ def login_page(request: Request):
 def dashboard_page(request: Request):
     """Dashboard page."""
     return templates.TemplateResponse("dashboard.html", {"request": request})
+
+
+@app.get("/upload", tags=["Pages"])
+def upload_page(request: Request):
+    """Upload page."""
+    return templates.TemplateResponse("upload.html", {"request": request})
 
 
 @app.get("/api/health", tags=["Health"])

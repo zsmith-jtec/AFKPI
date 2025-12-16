@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Data{% endblock %}
+
+{% block navbar_right %}
+<div class="d-flex align-items-center gap-3">
+    <div class="dropdown">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="user-menu" data-bs-toggle="dropdown">
+            <i class="fas fa-user me-1"></i><span id="user-name">User</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#" onclick="api.logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/revenue">
+                            <i class="fas fa-dollar-sign me-2"></i>Revenue
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/margin">
+                            <i class="fas fa-chart-line me-2"></i>Gross Margin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/labor">
+                            <i class="fas fa-hard-hat me-2"></i>Labor
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a class="nav-link active" href="/upload">
+                            <i class="fas fa-upload me-2"></i>Upload Data
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-4 py-3">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="mb-0">Upload Data</h2>
+                    <small class="text-muted">Upload Excel/CSV files from Epicor BAQ exports</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Upload Card -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header card-header-dark">
+                            <i class="fas fa-file-upload me-2"></i>Upload File
+                        </div>
+                        <div class="card-body">
+                            <!-- File Type Selector -->
+                            <div class="mb-4">
+                                <label class="form-label">Data Type</label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="file_type" id="type-revenue" value="revenue" checked>
+                                    <label class="btn btn-outline-secondary" for="type-revenue">
+                                        <i class="fas fa-dollar-sign me-1"></i>Revenue
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="file_type" id="type-labor" value="labor">
+                                    <label class="btn btn-outline-secondary" for="type-labor">
+                                        <i class="fas fa-clock me-1"></i>Labor
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="file_type" id="type-jobs" value="jobs">
+                                    <label class="btn btn-outline-secondary" for="type-jobs">
+                                        <i class="fas fa-briefcase me-1"></i>Jobs
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="file_type" id="type-material" value="material">
+                                    <label class="btn btn-outline-secondary" for="type-material">
+                                        <i class="fas fa-boxes me-1"></i>Material
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Drop Zone -->
+                            <div id="drop-zone" class="drop-zone">
+                                <div class="drop-zone-content">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                    <p class="mb-2">Drag & drop your Excel or CSV file here</p>
+                                    <p class="text-muted small">or</p>
+                                    <label class="btn btn-jtec-primary">
+                                        <i class="fas fa-folder-open me-2"></i>Browse Files
+                                        <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Selected File Info -->
+                            <div id="file-info" class="d-none mt-3">
+                                <div class="alert alert-info d-flex align-items-center">
+                                    <i class="fas fa-file-excel me-3 fa-2x"></i>
+                                    <div class="flex-grow-1">
+                                        <strong id="file-name">filename.xlsx</strong>
+                                        <br><small id="file-size">0 KB</small>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="clearFile()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Upload Button -->
+                            <div class="mt-4">
+                                <button id="upload-btn" class="btn btn-jtec-primary btn-lg w-100" disabled onclick="uploadFile()">
+                                    <i class="fas fa-upload me-2"></i>Upload & Process
+                                </button>
+                            </div>
+
+                            <!-- Progress -->
+                            <div id="upload-progress" class="d-none mt-3">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" style="width: 100%"></div>
+                                </div>
+                                <small class="text-muted">Processing file...</small>
+                            </div>
+
+                            <!-- Result -->
+                            <div id="upload-result" class="d-none mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header card-header-orange">
+                            <i class="fas fa-info-circle me-2"></i>Instructions
+                        </div>
+                        <div class="card-body">
+                            <h6>Workflow:</h6>
+                            <ol class="small">
+                                <li>Export BAQ from Epicor to Excel/CSV</li>
+                                <li>Select the data type above</li>
+                                <li>Drop the file or click Browse</li>
+                                <li>Click Upload & Process</li>
+                                <li>View updated data in Dashboard</li>
+                            </ol>
+
+                            <hr>
+
+                            <h6>Required Columns:</h6>
+                            <div id="column-help">
+                                <p class="small mb-1"><strong>Revenue:</strong> DocExtPrice</p>
+                                <p class="small mb-1"><strong>Labor:</strong> JobNum, LaborHrs</p>
+                                <p class="small mb-1"><strong>Jobs:</strong> JobNum</p>
+                                <p class="small mb-0"><strong>Material:</strong> JobNum, ExtCost</p>
+                            </div>
+
+                            <hr>
+
+                            <h6>Supported Formats:</h6>
+                            <p class="small mb-0">
+                                <i class="fas fa-file-csv text-success me-1"></i>CSV<br>
+                                <i class="fas fa-file-excel text-success me-1"></i>Excel (.xlsx, .xls)
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Uploads -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <i class="fas fa-history me-2"></i>Recent Uploads
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush" id="recent-uploads">
+                                <li class="list-group-item text-muted small">No recent uploads</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/upload.js"></script>
+<script>
+    // Check authentication
+    if (!api.isAuthenticated()) {
+        window.location.href = '/login';
+    }
+
+    // Set user name
+    const user = api.getUser();
+    if (user) {
+        document.getElementById('user-name').textContent = user.name || user.email;
+    }
+
+    // Initialize upload page
+    initUpload();
+</script>
+{% endblock %}

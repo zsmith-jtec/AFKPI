@@ -345,3 +345,49 @@ a:hover {
     margin-bottom: 15px;
   }
 }
+
+/* Upload Page - Drop Zone */
+.drop-zone {
+  border: 2px dashed var(--gray-400);
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background-color: var(--gray-50);
+}
+
+.drop-zone:hover {
+  border-color: var(--jtec-orange);
+  background-color: #fff3e0;
+}
+
+.drop-zone.drag-over {
+  border-color: var(--jtec-orange);
+  background-color: #fff3e0;
+  transform: scale(1.02);
+}
+
+.drop-zone-content {
+  pointer-events: none;
+}
+
+.drop-zone-content label {
+  pointer-events: auto;
+}
+
+/* File type selector buttons */
+.btn-check:checked + .btn-outline-secondary {
+  background-color: var(--jtec-orange);
+  border-color: var(--jtec-orange);
+  color: white;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--gray-100);
+}
+
+/* Progress bar */
+.progress-bar.bg-warning {
+  background-color: var(--jtec-orange) !important;
+}
