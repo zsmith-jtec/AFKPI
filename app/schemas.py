@@ -91,11 +91,11 @@ class JobDetail(JobRead):
 # ============ REVENUE SCHEMAS ============
 
 class RevenueByProduct(BaseModel):
-    """Revenue aggregated by product group."""
+    """Revenue aggregated by product group (combined inbound/outbound)."""
     product_group: str
-    direction: DirectionEnum
-    revenue: Decimal
-    order_count: int
+    inbound: Decimal = Decimal("0")
+    outbound: Decimal = Decimal("0")
+    order_count: int = 0
     target_margin: Optional[Decimal] = None
 
 

@@ -57,26 +57,41 @@ def get_revenue_summary(
     query = query.group_by(DimProduct.product_group, FactRevenue.direction)
     results = query.all()
 
-    # Build response
-    by_product = []
+    # Build response - combine inbound/outbound per product group for charts
+    product_data = {}
     total_inbound = Decimal("0")
     total_outbound = Decimal("0")
 
     for row in results:
-        direction_enum = DirectionEnum.INBOUND if row.direction == Direction.INBOUND else DirectionEnum.OUTBOUND
-        revenue_item = RevenueByProduct(
-            product_group=row.product_group,
-            direction=direction_enum,
-            revenue=row.revenue or Decimal("0"),
-            order_count=row.order_count or 0,
-            target_margin=row.target_margin
-        )
-        by_product.append(revenue_item)
+        pg = row.product_group
+        if pg not in product_data:
+            product_data[pg] = {
+                "product_group": pg,
+                "inbound": Decimal("0"),
+                "outbound": Decimal("0"),
+                "order_count": 0,
+                "target_margin": row.target_margin
+            }
 
         if row.direction == Direction.INBOUND:
+            product_data[pg]["inbound"] = row.revenue or Decimal("0")
             total_inbound += row.revenue or Decimal("0")
         else:
+            product_data[pg]["outbound"] = row.revenue or Decimal("0")
             total_outbound += row.revenue or Decimal("0")
+        product_data[pg]["order_count"] += row.order_count or 0
+
+    # Convert to list format expected by frontend
+    by_product = [
+        RevenueByProduct(
+            product_group=data["product_group"],
+            inbound=data["inbound"],
+            outbound=data["outbound"],
+            order_count=data["order_count"],
+            target_margin=data["target_margin"]
+        )
+        for data in product_data.values()
+    ]
 
     return RevenueSummary(
         week=WeekSummary(

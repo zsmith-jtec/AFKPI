@@ -129,18 +129,22 @@ def create_jobs(db: Session, products: list[DimProduct], num_jobs: int = 50) -> 
     """Create sample jobs linked to products.
 
     Maps to jt_zjobhead01 BAQ:
-    - job_num = JobHead_JobNum (format: 6-digit number like "123456")
+    - job_num = JobHead_JobNum (format: starts with 0 or F, e.g., "012345", "F12345")
     - sales_order_num = Linked via JobProd to OrderHed_OrderNum
     - part_num = JobHead_PartNum
     - job_closed = JobHead_JobClosed (FALSE=WIP, TRUE=Completed)
     """
     jobs = []
-    # Start job numbers at a realistic value (Epicor jobs are typically 6 digits)
-    base_job_num = 240001  # 2024 jobs starting at 001
+    # Job numbers start with 0 or F per Epicor convention
+    # 0-prefix for standard jobs, F-prefix for field service jobs
     base_order_num = 85000  # Sales orders
 
     for i in range(num_jobs):
-        job_num = str(base_job_num + i)  # e.g., "240001", "240002"
+        # Alternate between 0-prefix and F-prefix jobs (70% standard, 30% field service)
+        if random.random() < 0.70:
+            job_num = f"0{24001 + i}"  # e.g., "024001", "024002"
+        else:
+            job_num = f"F{24001 + i}"  # e.g., "F24001", "F24002"
 
         existing = db.query(DimJob).filter(DimJob.job_num == job_num).first()
         if existing:
