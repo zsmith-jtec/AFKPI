@@ -1,5 +1,5 @@
 /**
- * AFKPI Upload Page Logic
+ * FOS Upload Page Logic
  * Handles drag-drop file upload and processing
  */
 

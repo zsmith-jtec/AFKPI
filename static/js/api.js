@@ -1,12 +1,12 @@
 /**
- * AFKPI API Helper
+ * FOS API Helper
  * Handles authentication and API calls
  */
 
 const api = {
     // Token storage key
-    TOKEN_KEY: 'afkpi_token',
-    USER_KEY: 'afkpi_user',
+    TOKEN_KEY: 'fos_token',
+    USER_KEY: 'fos_user',
 
     /**
      * Get stored JWT token

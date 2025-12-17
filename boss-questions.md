@@ -1,4 +1,4 @@
-# AFKPI Project - Questions & Recommendations
+# FOS Project - Questions & Recommendations
 
 **Review of**: Document4.docx (Microsoft Copilot conversation)
 **Perspective**: CFO/COO of 150-employee manufacturing company

@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**AFKPI** (Weekly Manufacturing KPI Application) - A planned internal web application for tracking key performance metrics across Finance, Sales, and Operations departments at a manufacturing company using Epicor ERP.
+**FOS** (Finance, Operations, Sales KPI App) - An internal web application for tracking key performance metrics across Finance, Sales, and Operations departments at a manufacturing company using Epicor ERP.
 
 ## Project Status
 
-**Pre-development** - Planning phase. See `boss-questions.md` for outstanding decisions needed before implementation.
+**In Development** - Core functionality implemented. See `boss-questions.md` for outstanding decisions.
 
 ## Planned Architecture
 

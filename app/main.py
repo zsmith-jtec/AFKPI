@@ -1,6 +1,6 @@
-"""AFKPI - Weekly Manufacturing KPI Application.
+"""FOS - Weekly Manufacturing KPI Application.
 
-FastAPI application entry point.
+Finance, Operations, Sales KPI App - FastAPI application entry point.
 """
 from pathlib import Path
 from fastapi import FastAPI, Request

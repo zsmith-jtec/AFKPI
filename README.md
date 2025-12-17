@@ -1,6 +1,6 @@
-# AFKPI - Weekly Manufacturing KPI Dashboard
+# FOS - Weekly Manufacturing KPI Dashboard
 
-A FastAPI backend for tracking weekly manufacturing KPIs: Revenue, Gross Margin, and Labor costs.
+**F**inance, **O**perations, **S**ales KPI App - A FastAPI backend for tracking weekly manufacturing KPIs: Revenue, Gross Margin, and Labor costs.
 
 ## Features
 

@@ -1,8 +1,8 @@
-"""SQLAlchemy ORM models for AFKPI database."""
+"""SQLAlchemy ORM models for FOS database."""
 from datetime import date, datetime
 from decimal import Decimal
 from sqlalchemy import (
-    Column, Integer, String, Date, DateTime, Numeric,
+    Column, Integer, String, Date, DateTime, Numeric, Boolean,
     ForeignKey, Text, Enum as SQLEnum
 )
 from sqlalchemy.orm import relationship
@@ -58,6 +58,7 @@ class DimJob(Base):
     sales_order_num = Column(String(50), nullable=True)
     part_num = Column(String(100), nullable=True)
     product_id = Column(Integer, ForeignKey("dim_product.product_id"), nullable=True)
+    job_closed = Column(Boolean, default=False)  # False=WIP, True=Completed
 
     # Relationships
     product = relationship("DimProduct", back_populates="jobs")
@@ -83,14 +84,25 @@ class FactRevenue(Base):
 
 
 class FactCosts(Base):
-    """Costs fact table - weekly costs by job."""
+    """Costs fact table - weekly costs by job.
+
+    Maps to jt_zLaborDtl01 and jt_zJobMaterial BAQs.
+    """
     __tablename__ = "fact_costs"
 
     fact_id = Column(Integer, primary_key=True, autoincrement=True)
     week_id = Column(Integer, ForeignKey("dim_week.week_id"), nullable=False)
     job_id = Column(Integer, ForeignKey("dim_job.job_id"), nullable=False)
+
+    # Labor hours from LaborDtl_LaborHrs, LaborDtl_BurdenHrs
+    labor_hours = Column(Numeric(10, 2), nullable=False, default=0)
+    burden_hours = Column(Numeric(10, 2), nullable=False, default=0)
+
+    # Labor costs = hours * rate (ResourceGroup_ProdLabRate, ResourceGroup_ProdBurRate)
     direct_labor = Column(Numeric(18, 2), nullable=False, default=0)
     burden = Column(Numeric(18, 2), nullable=False, default=0)
+
+    # Material from jt_zJobMaterial (EstUnitCost * IssuedQty)
     material_cost = Column(Numeric(18, 2), nullable=False, default=0)
 
     # Relationships

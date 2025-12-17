@@ -1,5 +1,5 @@
 /**
- * AFKPI Chart Rendering
+ * FOS Chart Rendering
  * Uses Plotly.js with JTEC brand colors
  */
 
@@ -75,7 +75,7 @@ function renderRevenueChart(byProduct) {
  */
 function renderMarginTrendChart(trendData) {
     if (!trendData || trendData.length === 0) {
-        document.getElementById('chart-margin').innerHTML =
+        document.getElementById('chart-margin-trend').innerHTML =
             '<p class="text-center text-muted py-5">No trend data available</p>';
         return;
     }
@@ -135,7 +135,7 @@ function renderMarginTrendChart(trendData) {
         }
     };
 
-    Plotly.newPlot('chart-margin', [actualTrace, targetTrace], layout, commonConfig);
+    Plotly.newPlot('chart-margin-trend', [actualTrace, targetTrace], layout, commonConfig);
 }
 
 /**

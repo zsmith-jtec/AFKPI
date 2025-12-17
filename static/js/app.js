@@ -1,11 +1,15 @@
 /**
- * AFKPI Application Logic
+ * FOS Application Logic
  * Dashboard initialization and data loading
  */
 
 // Current state
 let currentWeekId = null;
 let weeksData = [];
+let currentJobFilter = 'all';  // 'all', 'wip', or 'completed'
+let periodType = 'weekly';  // 'weekly' or 'monthly'
+let monthsData = [];
+let currentMonthWeekIds = [];  // Week IDs for currently selected month
 
 /**
  * Initialize dashboard
@@ -31,41 +35,129 @@ async function initDashboard() {
 }
 
 /**
+ * Set period type (weekly or monthly)
+ */
+async function setPeriodType(type) {
+  periodType = type;
+
+  // Update button states
+  const weeklyBtn = document.getElementById('period-weekly');
+  const monthlyBtn = document.getElementById('period-monthly');
+  if (weeklyBtn && monthlyBtn) {
+    weeklyBtn.classList.toggle('active', type === 'weekly');
+    monthlyBtn.classList.toggle('active', type === 'monthly');
+  }
+
+  // Load appropriate data into selector
+  if (type === 'weekly') {
+    await populateWeekSelector();
+  } else {
+    await populateMonthSelector();
+  }
+
+  // Reload current page data
+  const path = window.location.pathname;
+  if (path === "/revenue") {
+    loadRevenueData();
+  } else if (path === "/margin") {
+    loadMarginData();
+  } else if (path === "/labor") {
+    loadLaborData();
+  } else {
+    loadDashboardData();
+  }
+}
+
+/**
  * Load available weeks into dropdown
  */
 async function loadWeeks() {
-  const weeks = await api.get("/api/weeks");
+  // Load both weeks and months data
+  const [weeks, months] = await Promise.all([
+    api.get("/api/weeks"),
+    api.get("/api/weeks/months")
+  ]);
   weeksData = weeks;
+  monthsData = months;
 
+  // Populate based on current period type
+  if (periodType === 'weekly') {
+    populateWeekSelector();
+  } else {
+    populateMonthSelector();
+  }
+
+  // Add change listener
+  const selector = document.getElementById("week-selector");
+  selector.addEventListener("change", handlePeriodChange);
+}
+
+/**
+ * Populate selector with weeks
+ */
+function populateWeekSelector() {
   const selector = document.getElementById("week-selector");
   selector.innerHTML = "";
 
-  weeks.forEach((week, index) => {
+  weeksData.forEach((week, index) => {
     const option = document.createElement("option");
     option.value = week.week_id;
     option.textContent = week.label;
     if (index === 0) {
       option.selected = true;
       currentWeekId = week.week_id;
+      currentMonthWeekIds = [week.week_id];
     }
     selector.appendChild(option);
   });
+}
 
-  // Add change listener - detect which page we're on
-  selector.addEventListener("change", function () {
-    currentWeekId = parseInt(this.value);
-    // Call appropriate load function based on current page
-    const path = window.location.pathname;
-    if (path === "/revenue") {
-      loadRevenueData();
-    } else if (path === "/margin") {
-      loadMarginData();
-    } else if (path === "/labor") {
-      loadLaborData();
-    } else {
-      loadDashboardData();
+/**
+ * Populate selector with months
+ */
+function populateMonthSelector() {
+  const selector = document.getElementById("week-selector");
+  selector.innerHTML = "";
+
+  monthsData.forEach((month, index) => {
+    const option = document.createElement("option");
+    option.value = month.week_ids.join(',');  // Store all week IDs
+    option.textContent = month.label;
+    if (index === 0) {
+      option.selected = true;
+      currentMonthWeekIds = month.week_ids;
+      currentWeekId = month.week_ids[0];  // Use first week as primary
     }
+    selector.appendChild(option);
   });
+}
+
+/**
+ * Handle period selector change
+ */
+function handlePeriodChange() {
+  const selector = document.getElementById("week-selector");
+
+  if (periodType === 'weekly') {
+    currentWeekId = parseInt(selector.value);
+    currentMonthWeekIds = [currentWeekId];
+  } else {
+    // Monthly: value contains comma-separated week IDs
+    currentMonthWeekIds = selector.value.split(',').map(id => parseInt(id));
+    currentWeekId = currentMonthWeekIds[0];
+  }
+
+  // Call appropriate load function based on current page
+  const path = window.location.pathname;
+  if (path === "/revenue") {
+    loadRevenueData();
+  } else if (path === "/margin") {
+    loadMarginData();
+  } else if (path === "/labor") {
+    loadLaborData();
+  } else {
+    loadDashboardData();
+  }
 }
 
 /**
@@ -75,10 +167,17 @@ async function loadDashboardData() {
   showLoading(true);
 
   try {
-    // Update week label
-    const week = weeksData.find((w) => w.week_id === currentWeekId);
-    if (week) {
-      document.getElementById("week-label").textContent = `Week ${week.label}`;
+    // Update period label
+    const weekLabelEl = document.getElementById("week-label");
+    if (periodType === 'monthly' && monthsData.length > 0) {
+      const selector = document.getElementById("week-selector");
+      const selectedOption = selector.options[selector.selectedIndex];
+      weekLabelEl.textContent = selectedOption ? selectedOption.textContent : 'Month --';
+    } else {
+      const week = weeksData.find((w) => w.week_id === currentWeekId);
+      if (week) {
+        weekLabelEl.textContent = `Week ${week.label}`;
+      }
     }
 
     // Load data in parallel
@@ -153,21 +252,25 @@ function updateJobsTable(jobs) {
   const topJobs = jobs.slice(0, 10);
 
   topJobs.forEach((job) => {
+    const statusBadge = job.job_closed
+      ? '<span class="badge bg-secondary">Completed</span>'
+      : '<span class="badge bg-success">WIP</span>';
     const row = document.createElement("tr");
     row.innerHTML = `
             <td><a href="#" onclick="showJobDetail('${job.job_num}')">${job.job_num}</a></td>
             <td>${job.sales_order_num || "--"}</td>
             <td>${job.product_group || "--"}</td>
+            <td>${statusBadge}</td>
             <td class="text-end">${api.formatCurrency(job.direct_labor)}</td>
             <td class="text-end">${api.formatCurrency(job.burden)}</td>
-            <td class="text-end"><strong>${api.formatCurrency(job.total_cost)}</strong></td>
+            <td class="text-end"><strong>${api.formatCurrency(job.total_labor)}</strong></td>
         `;
     tbody.appendChild(row);
   });
 
   if (topJobs.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="6" class="text-center text-muted">No job data available</td></tr>';
+      '<tr><td colspan="7" class="text-center text-muted">No job data available</td></tr>';
   }
 }
 
@@ -395,6 +498,21 @@ async function initLabor() {
 }
 
 /**
+ * Set job filter and reload data
+ */
+function setJobFilter(filter) {
+  currentJobFilter = filter;
+
+  // Update button states
+  document.getElementById('filter-all').classList.toggle('active', filter === 'all');
+  document.getElementById('filter-wip').classList.toggle('active', filter === 'wip');
+  document.getElementById('filter-completed').classList.toggle('active', filter === 'completed');
+
+  // Reload data
+  loadLaborData();
+}
+
+/**
  * Load labor page data
  */
 async function loadLaborData() {
@@ -405,18 +523,18 @@ async function loadLaborData() {
       document.getElementById("week-label").textContent = `Week ${week.label}`;
     }
 
-    const laborData = await api.get(`/api/labor?week_id=${currentWeekId}`);
+    const laborData = await api.get(`/api/labor?week_id=${currentWeekId}&status=${currentJobFilter}`);
 
-    // Update KPIs
+    // Update KPIs - uses LaborDtl_LaborHrs, LaborDtl_BurdenHrs from jt_zLaborDtl01
     document.getElementById("kpi-direct-labor").textContent =
       api.formatCurrency(laborData.total_direct_labor || 0);
     document.getElementById("kpi-labor-hours").textContent =
-      `${(laborData.total_labor_hours || 0).toFixed(1)} hours`;
+      `${parseFloat(laborData.total_labor_hours || 0).toFixed(1)} hours`;
     document.getElementById("kpi-burden").textContent = api.formatCurrency(
       laborData.total_burden || 0,
     );
     document.getElementById("kpi-burden-hours").textContent =
-      `${(laborData.total_burden_hours || 0).toFixed(1)} hours`;
+      `${parseFloat(laborData.total_burden_hours || 0).toFixed(1)} hours`;
     document.getElementById("kpi-total-labor").textContent = api.formatCurrency(
       laborData.total_labor_cost || 0,
     );
@@ -445,22 +563,27 @@ function updateLaborTable(jobs) {
   tbody.innerHTML = "";
 
   (jobs || []).forEach((job) => {
+    const statusBadge = job.job_closed
+      ? '<span class="badge bg-secondary">Completed</span>'
+      : '<span class="badge bg-success">WIP</span>';
+    const laborHrs = parseFloat(job.labor_hours || 0).toFixed(1);
     const row = document.createElement("tr");
     row.innerHTML = `
             <td><a href="#" onclick="showJobDetail('${job.job_num}')">${job.job_num}</a></td>
             <td>${job.sales_order_num || "--"}</td>
             <td>${job.product_group || "--"}</td>
-            <td class="text-end">${(job.labor_hours || 0).toFixed(1)}</td>
+            <td>${statusBadge}</td>
+            <td class="text-end">${laborHrs}</td>
             <td class="text-end">${api.formatCurrency(job.direct_labor || 0)}</td>
             <td class="text-end">${api.formatCurrency(job.burden || 0)}</td>
-            <td class="text-end"><strong>${api.formatCurrency(job.total_cost || 0)}</strong></td>
+            <td class="text-end"><strong>${api.formatCurrency(job.total_labor || 0)}</strong></td>
         `;
     tbody.appendChild(row);
   });
 
   if (!jobs || jobs.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="7" class="text-center text-muted">No labor data available</td></tr>';
+      '<tr><td colspan="8" class="text-center text-muted">No labor data available</td></tr>';
   }
 }
 

@@ -7,12 +7,12 @@ class Settings(BaseSettings):
     """Application settings loaded from environment or defaults."""
 
     # App info
-    app_name: str = "AFKPI"
+    app_name: str = "FOS"
     app_version: str = "0.1.0"
     debug: bool = True
 
     # Database
-    database_url: str = "sqlite:///./data/afkpi.db"
+    database_url: str = "sqlite:///./data/fos.db"
 
     # JWT Auth
     secret_key: str = "change-this-in-production-use-strong-random-key"

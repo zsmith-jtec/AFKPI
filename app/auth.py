@@ -1,4 +1,4 @@
-"""JWT authentication for AFKPI.
+"""JWT authentication for FOS.
 
 NOTE: This is a demo/prototype implementation.
 For production, use a proper user database with hashed passwords.

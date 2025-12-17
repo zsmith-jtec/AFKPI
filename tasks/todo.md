@@ -1,10 +1,10 @@
-# AFKPI Project Plan
+# FOS Project Plan
 
 ## Project Summary
 
 | Item | Value |
 |------|-------|
-| **Project** | AFKPI - Weekly Manufacturing KPI Dashboard |
+| **Project** | FOS - Weekly Manufacturing KPI Dashboard |
 | **Budget** | $500 |
 | **Timeline** | 1 month (working prototype) |
 | **Developer** | Internal (Zach Smith) |
@@ -17,7 +17,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              AFKPI SYSTEM                                   │
+│                              FOS SYSTEM                                     │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────┐     Weekly CSV      ┌──────────────┐      ┌─────────────────┐
@@ -151,7 +151,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  AFKPI Dashboard                                    [Week: 2025-W51 ▼] [Export]│
+│  FOS Dashboard                                      [Week: 2025-W51 ▼] [Export]│
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐              │

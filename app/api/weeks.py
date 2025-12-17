@@ -1,12 +1,14 @@
 """Weeks API endpoints."""
 from typing import List
+from collections import defaultdict
+from calendar import month_abbr
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 
 from app.database import get_db
 from app.models import DimWeek
-from app.schemas import WeekRead, WeekSummary
+from app.schemas import WeekRead, WeekSummary, MonthSummary
 
 router = APIRouter()
 
@@ -50,6 +52,39 @@ def get_current_week(db: Session = Depends(get_db)):
         iso_week=week.iso_week,
         label=f"{week.iso_year}-W{week.iso_week:02d}"
     )
+
+
+@router.get("/months", response_model=List[MonthSummary])
+def list_months(
+    limit: int = 13,
+    db: Session = Depends(get_db)
+):
+    """List available months with their week IDs, most recent first."""
+    weeks = db.query(DimWeek).order_by(
+        desc(DimWeek.iso_year),
+        desc(DimWeek.iso_week)
+    ).all()
+
+    # Group weeks by calendar month (based on week_start date)
+    months_dict = defaultdict(list)
+    for w in weeks:
+        year = w.week_start.year
+        month = w.week_start.month
+        key = (year, month)
+        months_dict[key].append(w.week_id)
+
+    # Sort by year-month descending and convert to list
+    sorted_months = sorted(months_dict.keys(), reverse=True)[:limit]
+
+    return [
+        MonthSummary(
+            year=year,
+            month=month,
+            label=f"{month_abbr[month]} {year}",
+            week_ids=months_dict[(year, month)]
+        )
+        for year, month in sorted_months
+    ]
 
 
 @router.get("/{week_id}", response_model=WeekRead)

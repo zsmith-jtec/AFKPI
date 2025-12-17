@@ -1,4 +1,4 @@
-# AFKPI Frontend - Replit AI Build Instructions
+# FOS Frontend - Replit AI Build Instructions
 
 ## IMPORTANT: First Steps
 
@@ -23,7 +23,7 @@ curl http://localhost:8000/api/health
 
 ## Overview
 
-Build a dashboard frontend for the AFKPI (Weekly Manufacturing KPI) application. The backend API is already built with FastAPI. Your job is to create the UI following the **JTEC Design System** specifications below.
+Build a dashboard frontend for the FOS (Weekly Manufacturing KPI) application. The backend API is already built with FastAPI. Your job is to create the UI following the **JTEC Design System** specifications below.
 
 ---
 
@@ -153,7 +153,7 @@ The navbar should be **dark (#1a1a1a)** with the JTEC branding pattern:
 <nav class="navbar navbar-dark" style="background-color: #1a1a1a; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
   <div class="container-fluid">
     <span class="navbar-brand" style="font-size: 1.3rem; font-weight: 700;">
-      JTEC INDUSTRIES <span style="color: #FF6600;">|</span> AFKPI
+      JTEC INDUSTRIES <span style="color: #FF6600;">|</span> FOS
     </span>
     <div class="d-flex align-items-center">
       <!-- Week selector and user menu go here -->
@@ -348,7 +348,7 @@ a:hover {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AFKPI - Weekly KPI Dashboard</title>
+  <title>FOS - Weekly KPI Dashboard</title>
   <!-- CSS dependencies here -->
 </head>
 <body style="background-color: #f5f5f5;">
@@ -412,7 +412,7 @@ a:hover {
 
 ### 1. Login Page (`/login`)
 - Centered card on light gray background
-- "AFKPI" title with JTEC orange accent
+- "FOS" title with JTEC orange accent
 - Email and password form fields
 - Orange submit button
 - Call `POST /api/auth/login` with `{email, password}`
@@ -611,7 +611,7 @@ static/
 
 1. User can log in and see dashboard
 2. UI matches JTEC Design System (orange/black branding, correct fonts)
-3. Navbar shows "JTEC INDUSTRIES | AFKPI" with orange separator
+3. Navbar shows "JTEC INDUSTRIES | FOS" with orange separator
 4. KPI cards show current week data with orange left border
 5. Charts render with orange brand color
 6. Tables have dark headers, variance coloring works

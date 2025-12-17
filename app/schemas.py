@@ -36,6 +36,14 @@ class WeekSummary(BaseModel):
     label: str  # e.g., "2025-W51"
 
 
+class MonthSummary(BaseModel):
+    """Simplified month for dropdowns."""
+    year: int
+    month: int
+    label: str  # e.g., "Dec 2025"
+    week_ids: List[int]  # Week IDs that fall within this month
+
+
 # ============ PRODUCT SCHEMAS ============
 
 class ProductBase(BaseModel):
@@ -147,20 +155,26 @@ class MarginSummary(BaseModel):
 # ============ LABOR SCHEMAS ============
 
 class LaborByJob(BaseModel):
-    """Labor hours by job."""
+    """Labor costs by job - maps to jt_zLaborDtl01 BAQ."""
     job_num: str
     sales_order_num: Optional[str]
-    direct_labor: Decimal
-    burden: Decimal
+    product_group: Optional[str] = None
+    job_closed: bool = False  # False=WIP, True=Completed (JobAsmbl_JobComplete)
+    labor_hours: Decimal = Decimal("0")  # LaborDtl_LaborHrs
+    burden_hours: Decimal = Decimal("0")  # LaborDtl_BurdenHrs
+    direct_labor: Decimal  # labor_hours * ResourceGroup_ProdLabRate
+    burden: Decimal  # burden_hours * ResourceGroup_ProdBurRate
     total_labor: Decimal
 
 
 class LaborSummary(BaseModel):
-    """Labor summary response."""
+    """Labor summary response - maps to jt_zLaborDtl01 BAQ."""
     week: WeekSummary
-    total_direct_labor: Decimal
-    total_burden: Decimal
-    total_labor_cost: Decimal
+    total_labor_hours: Decimal = Decimal("0")  # Sum of LaborDtl_LaborHrs
+    total_burden_hours: Decimal = Decimal("0")  # Sum of LaborDtl_BurdenHrs
+    total_direct_labor: Decimal  # Sum of labor costs
+    total_burden: Decimal  # Sum of burden costs
+    total_labor_cost: Decimal  # total_direct_labor + total_burden
     job_count: int
     by_job: List[LaborByJob]
 

@@ -66,6 +66,12 @@
                     <h2 class="mb-0">Labor</h2>
                     <small class="text-muted" id="week-label">Week --</small>
                 </div>
+                <!-- Status Filter Toggle -->
+                <div class="btn-group" role="group" aria-label="Job status filter">
+                    <button type="button" class="btn btn-outline-secondary active" id="filter-all" onclick="setJobFilter('all')">All</button>
+                    <button type="button" class="btn btn-outline-secondary" id="filter-wip" onclick="setJobFilter('wip')">WIP</button>
+                    <button type="button" class="btn btn-outline-secondary" id="filter-completed" onclick="setJobFilter('completed')">Completed</button>
+                </div>
             </div>
 
             <!-- Loading Spinner -->
@@ -138,6 +144,7 @@
                                             <th>Job #</th>
                                             <th>Sales Order</th>
                                             <th>Product Group</th>
+                                            <th>Status</th>
                                             <th class="text-end">Labor Hours</th>
                                             <th class="text-end">Direct Labor</th>
                                             <th class="text-end">Burden</th>
