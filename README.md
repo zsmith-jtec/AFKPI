@@ -36,7 +36,7 @@ uvicorn app.main:app --reload
 ```
 
 ## Test Login
-- Email: `demo@jtec.com`
+- Email: `demo@jtecindustries.com`
 - Password: `demo123`
 
 ## API Endpoints
