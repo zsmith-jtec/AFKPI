@@ -74,6 +74,17 @@ body {
   color: var(--gray-500);
 }
 
+.navbar-link {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.navbar-link:hover {
+  color: var(--jtec-orange);
+  text-decoration: none;
+}
+
 /* Footer */
 .footer-jtec {
   text-align: center;
