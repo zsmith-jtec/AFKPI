@@ -402,3 +402,66 @@ a:hover {
 .progress-bar.bg-warning {
   background-color: var(--jtec-orange) !important;
 }
+
+/* Timeline Slider - Excel Pivot Table Style */
+.timeline-slider-container {
+  background: white;
+  padding: 15px 20px;
+  box-shadow: var(--shadow-sm);
+  border-left: 3px solid var(--jtec-orange);
+}
+
+.timeline-slider {
+  flex: 1;
+  height: 8px;
+  cursor: pointer;
+}
+
+.timeline-slider::-webkit-slider-track {
+  background: var(--gray-200);
+  border-radius: 4px;
+  height: 8px;
+}
+
+.timeline-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--jtec-orange);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.timeline-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: var(--shadow-orange);
+}
+
+.timeline-slider::-moz-range-track {
+  background: var(--gray-200);
+  border-radius: 4px;
+  height: 8px;
+}
+
+.timeline-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--jtec-orange);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.timeline-label {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  min-width: 80px;
+  text-align: center;
+}
+
+#timeline-current {
+  font-weight: 600;
+  color: var(--jtec-orange);
+}

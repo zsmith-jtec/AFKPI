@@ -87,9 +87,91 @@ async function loadWeeks() {
     populateMonthSelector();
   }
 
-  // Add change listener
+  // Add change listener to dropdown
   const selector = document.getElementById("week-selector");
   selector.addEventListener("change", handlePeriodChange);
+
+  // Initialize timeline slider
+  initTimelineSlider();
+}
+
+/**
+ * Initialize the timeline slider
+ */
+function initTimelineSlider() {
+  const slider = document.getElementById("timeline-slider");
+  if (!slider || weeksData.length === 0) return;
+
+  // Set slider range (reversed: 0 = most recent, max = oldest)
+  slider.min = 0;
+  slider.max = weeksData.length - 1;
+  slider.value = 0;
+
+  // Update labels
+  updateSliderLabels();
+
+  // Add event listener
+  slider.addEventListener("input", handleSliderChange);
+}
+
+/**
+ * Update slider labels based on current data
+ */
+function updateSliderLabels() {
+  const startLabel = document.getElementById("timeline-start");
+  const endLabel = document.getElementById("timeline-end");
+  const currentLabel = document.getElementById("timeline-current");
+
+  if (!startLabel || !endLabel || !currentLabel) return;
+
+  if (weeksData.length > 0) {
+    // Most recent week (slider position 0)
+    startLabel.textContent = weeksData[0].label;
+    // Oldest week (slider max position)
+    endLabel.textContent = weeksData[weeksData.length - 1].label;
+    // Current selection
+    const currentIdx = parseInt(document.getElementById("timeline-slider")?.value || 0);
+    currentLabel.textContent = weeksData[currentIdx]?.label || "--";
+  }
+}
+
+/**
+ * Handle timeline slider change
+ */
+function handleSliderChange(e) {
+  const idx = parseInt(e.target.value);
+  if (idx >= 0 && idx < weeksData.length) {
+    const week = weeksData[idx];
+    currentWeekId = week.week_id;
+    currentMonthWeekIds = [week.week_id];
+
+    // Update dropdown to match
+    const selector = document.getElementById("week-selector");
+    if (selector) selector.value = week.week_id;
+
+    // Update current label
+    const currentLabel = document.getElementById("timeline-current");
+    if (currentLabel) currentLabel.textContent = week.label;
+
+    // Reload data for current page
+    reloadCurrentPage();
+  }
+}
+
+/**
+ * Reload data for the current page
+ */
+function reloadCurrentPage() {
+  const path = window.location.pathname;
+  if (path === "/revenue") {
+    loadRevenueData();
+  } else if (path === "/margin") {
+    loadMarginData();
+  } else if (path === "/labor") {
+    loadLaborData();
+  } else {
+    loadDashboardData();
+  }
 }
 
 /**
@@ -141,6 +223,17 @@ function handlePeriodChange() {
   if (periodType === 'weekly') {
     currentWeekId = parseInt(selector.value);
     currentMonthWeekIds = [currentWeekId];
+
+    // Sync slider with dropdown
+    const slider = document.getElementById("timeline-slider");
+    if (slider) {
+      const idx = weeksData.findIndex(w => w.week_id === currentWeekId);
+      if (idx >= 0) {
+        slider.value = idx;
+        const currentLabel = document.getElementById("timeline-current");
+        if (currentLabel) currentLabel.textContent = weeksData[idx].label;
+      }
+    }
   } else {
     // Monthly: value contains comma-separated week IDs
     currentMonthWeekIds = selector.value.split(',').map(id => parseInt(id));
@@ -148,16 +241,7 @@ function handlePeriodChange() {
   }
 
   // Call appropriate load function based on current page
-  const path = window.location.pathname;
-  if (path === "/revenue") {
-    loadRevenueData();
-  } else if (path === "/margin") {
-    loadMarginData();
-  } else if (path === "/labor") {
-    loadLaborData();
-  } else {
-    loadDashboardData();
-  }
+  reloadCurrentPage();
 }
 
 /**
