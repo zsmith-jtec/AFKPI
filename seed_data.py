@@ -285,8 +285,8 @@ def seed_database():
 
     # Configuration - 13 months of sample data
     NUM_WEEKS = 56  # ~13 months
-    NUM_JOBS = 2000  # Realistic job count for 13 months (~8 jobs/day)
-    JOBS_PER_WEEK = 150  # Active jobs per week (jobs with labor activity)
+    NUM_JOBS = 10000  # ~770 jobs/month, ~35 jobs/day
+    JOBS_PER_WEEK = 500  # Active jobs per week (jobs with labor activity)
 
     db = SessionLocal()
     try:
